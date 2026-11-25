@@ -1,25 +1,33 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'screen1.dart';
 import 'screen2.dart';
 import 'screen3.dart';
 import 'screen4.dart';
 
 void main() {
-  runApp(const MaterialApp(
-    debugShowCheckedModeBanner: false,
-    home: BottomNavLab(),
-  ));
+  runApp(
+    ChangeNotifierProvider(
+      create: (_) => TabModel(),
+      child: const MaterialApp(
+        debugShowCheckedModeBanner: false,
+        home: BottomNavLab(),
+      ),
+    ),
+  );
 }
 
-class BottomNavLab extends StatefulWidget {
-  const BottomNavLab({super.key});
-
-  @override
-  State<BottomNavLab> createState() => _BottomNavLabState();
-}
-
-class _BottomNavLabState extends State<BottomNavLab> {
+class TabModel extends ChangeNotifier {
   int currentIndex = 0;
+
+  void selectTab(int index) {
+    currentIndex = index;
+    notifyListeners();
+  }
+}
+
+class BottomNavLab extends StatelessWidget {
+  const BottomNavLab({super.key});
 
   final List<Widget> screens = const [
     Screen1(),
@@ -30,6 +38,8 @@ class _BottomNavLabState extends State<BottomNavLab> {
 
   @override
   Widget build(BuildContext context) {
+    final currentIndex = context.watch<TabModel>().currentIndex;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Bottom Navigation Bar'),
@@ -43,11 +53,7 @@ class _BottomNavLabState extends State<BottomNavLab> {
         backgroundColor: Colors.blue,
         iconSize: 30,
         currentIndex: currentIndex,
-        onTap: (int index) {
-          setState(() {
-            currentIndex = index;
-          });
-        },
+        onTap: (int index) => context.read<TabModel>().selectTab(index),
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
           BottomNavigationBarItem(icon: Icon(Icons.alarm), label: 'Alarm'),
