@@ -42,7 +42,7 @@ class BottomNavLab extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Bottom Navigation Bar'),
+        title: const Text('Bottom Navigation Bar - Main Screen Part'),
         backgroundColor: Colors.blue,
         foregroundColor: Colors.white,
       ),
